@@ -41,7 +41,6 @@ public:
                 d = &instance;
             }
         }
-        CombUtils::toString(*d);
         return maxVal;
     }
 };

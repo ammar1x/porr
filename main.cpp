@@ -19,8 +19,8 @@ int main() {
     for(KnapsackProblem& problem : problems) {
         cout << bruteForceSolver.solve(problem) << endl;
     }
-
 }
+
 int main1() {
     string filePath = "/Users/ammar/Dropbox/porr/data/pb7.dat";
     Configuration conf = Configuration::fromFile(filePath);
