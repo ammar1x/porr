@@ -7,10 +7,12 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 #include <fstream>
 #include <cctype>
 #include <sstream>
-#include "lib/json.hpp"
+#include <json.hpp>
+
 
 using namespace std;
 
@@ -24,7 +26,16 @@ public:
     Configuration() {}
 
     static Configuration fromFile(string fileName) {
-        fstream f(fileName);
+
+
+
+        fstream f;
+
+        f.open(fileName);
+        if (!f.is_open()) {
+            throw std::runtime_error("Couldnt open file " + fileName + " for reading");
+        }
+
         Configuration c;
         c.knapsacksCount = nextInt(f);
         c.objectsCount = nextInt(f);
@@ -45,7 +56,7 @@ public:
 
     static void skipLine(fstream &f) {
         int c;
-        while((c = f.get()) != '\n'  && c != '\r' && c != '\r\n')
+        while(((c = f.get()) != '\n')  && c != '\r')
             ;
     }
 
@@ -96,6 +107,19 @@ public:
         return j;
     }
 
+    /*
+     * get only basic information
+     */
+    nlohmann::json toBasicJson() {
+        using json = nlohmann::json;
+        json j;
+        j["nameOfTheGame"] = nameOfTheGame;
+        j["optimalValue"] = optimalValue;
+        j["knapsacksCount"] = knapsacksCount;
+        j["objectsCount"] = objectsCount;
+        return j;
+    }
+
     string nameOfTheGame;
     long optimalValue;
     int knapsacksCount;
@@ -105,6 +129,8 @@ public:
     // first index = knapsack
     // second index = constraint of object
     vector<vector<int>> constraints;
+
+
 };
 
 

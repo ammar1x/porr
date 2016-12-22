@@ -32,6 +32,20 @@ public:
         cout << "]";
     }
 
+    static int* asArray(vector<vector<int>> ids) {
+
+        int n = ids[0].size();
+        int m = ids.size();
+        int* h = new int[m*n];
+
+        for(int i = 0; i < m; ++i) {
+            for(int j = 0; j < n; ++j) {
+                h[i*n+j] = ids[i][j];
+            }
+        }
+        return h;
+    }
+
     static vector<vector<int>> combination(int n) {
         if (n == 0) {
             vector<vector<int>> d;

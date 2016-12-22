@@ -18,18 +18,18 @@ TEST(TestGTest, NoWhere) {
 }
 
 TEST(TestConfiguration, conf) {
-
+    // nothing
 }
 
 TEST(TestBruteForce, bruteOne) {
     KnapsackProblem pr;
-    pr.capacity = 5;
-    pr.objectsWeights = {4, 6, 5};
-    pr.objectsValues = {12,10,8};
+    pr.capacity = 900;
+    pr.objectsWeights = {4, 6, 5, 5, 5, 5, 5,5 ,5, 5,5};
+    pr.objectsValues = {4, 6, 5, 5, 5, 5, 5,5 ,5, 5,5};
     SeqBruteForceSolver solver;
     int sol = solver.solve(pr);
     cout << sol << endl;
-    EXPECT_EQ(sol, 12);
+//    EXPECT_EQ(sol, 12);
 }
 
 
@@ -46,5 +46,5 @@ TEST(TestBruteForce, bruteTwo) {
 int main(int argc, char*argv[]) {
 
     ::testing::InitGoogleTest(&argc, argv);
-    RUN_ALL_TESTS();
+    return RUN_ALL_TESTS();
 }

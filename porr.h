@@ -9,7 +9,6 @@
 #include "Configuration.h"
 #include "KnapsackProblem.h"
 #include "SeqBruteForce.h"
-#include "SeqDynamicSolver.h"
 
 
 

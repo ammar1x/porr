@@ -19,9 +19,21 @@ struct KnapsackProblem {
     vector<int> objectsWeights;
     int capacity;
 
+    KnapsackProblem() {
+
+    }
+
+    KnapsackProblem(vector<int>& objectsValues, vector<int>& objectsWeights,
+                    int capacity) {
+        this->capacity = capacity;
+        this->objectsValues = objectsValues;
+        this->objectsWeights = objectsWeights;
+    }
+
 };
 
 vector<KnapsackProblem> getKnapsackProblems(Configuration& conf) {
+
     vector<KnapsackProblem> knapsackProblems;
     for(int i = 0; i < conf.knapsacksCount; ++i) {
         KnapsackProblem knapsackProblem;
