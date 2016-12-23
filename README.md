@@ -1,4 +1,4 @@
-# porr
+# Porr - Knapsack Problem Solver
 
 
 # install dependencies
@@ -11,10 +11,13 @@
 
 # build
 
-- mkdir build
-- cmake ../
+```
+mkdir build
+cd
+cmake ../
+```
 
-bin files will be in directory output/bin
+binary files will be in directory output/bin
 
 # run
 
