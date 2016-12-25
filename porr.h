@@ -8,7 +8,12 @@
 #include "CombUtils.h"
 #include "Configuration.h"
 #include "KnapsackProblem.h"
+#include "KnapsackProblemSolver.h"
 #include "SeqBruteForce.h"
+#include "KnapsackProblemFactory.h"
+#include "OCLBruteForce.h"
+#include "OCLHelper.h"
+
 
 
 

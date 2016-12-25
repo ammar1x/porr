@@ -120,10 +120,10 @@ public:
         return j;
     }
 
-    string nameOfTheGame;
-    long optimalValue;
-    int knapsacksCount;
-    int objectsCount;
+    string nameOfTheGame = "";
+    long optimalValue = -1;
+    int knapsacksCount = -1;
+    int objectsCount = -1;
     vector<int> objectsValues;
     vector<int> knapsacksCapacities;
     // first index = knapsack

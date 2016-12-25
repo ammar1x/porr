@@ -11,7 +11,7 @@ class KnapsackProblemSolver {
 
 public:
     virtual ~KnapsackProblemSolver() {};
-    virtual int solve(KnapsackProblem& problem) = 0;
+    virtual long solve(const KnapsackProblem& problem) = 0;
 };
 
 

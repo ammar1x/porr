@@ -11,6 +11,7 @@
 #include "KnapsackProblem.h"
 #include "CombUtils.h"
 #include "OCLHelper.h"
+#include <glog/logging.h>
 
 
 #include "KnapsackProblemSolver.h"
@@ -20,7 +21,7 @@ public:
 
 
     OCLBruteForce() :
-            kernelPath("./conf/KnapsackBruteSolver.cl"){
+            kernelPath("/Users/ammar/Dropbox/porr/conf/KnapsackBruteSolver.cl"){
 
     }
 
@@ -31,6 +32,14 @@ public:
 
     void setDevice(cl::Device* device) {
         this->device = device;
+    }
+
+    void setupOcl(cl::Device* dev, cl::Context* ctx) {
+        this->device = dev;
+        this->context = ctx;
+        buildProgram();
+        LOG(INFO) << OCLHelper::getDeviceInfo(*this->device) << endl;
+
     }
 
 
@@ -52,35 +61,30 @@ public:
         sources.push_back({kernel.c_str(),kernel.length()});
 
         cl::Program program(*context, sources);
-        if(program.build({*device})!=CL_SUCCESS){
+        if(program.build({*device}) != CL_SUCCESS){
             std::cout<<" Error building: "<<program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(*device)<<"\n";
             exit(1);
         }
         this->program = program;
     }
 
-    virtual int solve(KnapsackProblem& problem) override {
+    virtual long solve(const KnapsackProblem& problem) override {
+
 
         int n = problem.objectsValues.size();
 
-        vector<vector<int>> instances = CombUtils::combination(n);
-        int m = instances.size();
-        // for each instance spawn a new worker
+//        vector<vector<int>> instances = CombUtils::getAllBitsOfLen(n);
 
+        int count = std::min(20, n);
+        int m = 1 << count;
 
-        cl::Buffer instancesBuffer = OCLHelper::createIntBuffer(*context, n * m);
+        cl::Buffer instancesBuffer = OCLHelper::createCharBuffer(*context, 1);
+
         cl::Buffer valuesBuffer = OCLHelper::createIntBuffer(*context, n);
         cl::Buffer weightsBuffer = OCLHelper::createIntBuffer(*context, n);
         cl::Buffer instancesOutBuffer = OCLHelper::createIntBuffer(*context, m);
 
-
         cl::CommandQueue queue(*context,*device);
-
-        int* h = CombUtils::asArray(instances);
-
-        queue.enqueueWriteBuffer(instancesBuffer,
-                                 CL_TRUE, 0,
-                                 sizeof(int)*n*m, h);
 
         queue.enqueueWriteBuffer(valuesBuffer,
                                  CL_TRUE,0,
@@ -100,24 +104,56 @@ public:
         kernel.setArg(4, n);
         kernel.setArg(5, problem.capacity);
 
-
-        cl::Event event;
-        queue.enqueueNDRangeKernel(kernel,
-                                   cl::NullRange,
-                                   cl::NDRange(m),
-                                   cl::NullRange,
-                                   nullptr, &event);
-
         int *out = new int[m];
+        int maxVal = 0;
 
-        event.wait();
-        queue.enqueueReadBuffer(instancesOutBuffer,CL_TRUE,0, sizeof(int)*m, out);
-        int val = max(out, m);
+
+        for(int i = 0, offset = 0; i <= (1 << n); i += m) {
+
+            cl::Event event;
+            queue.enqueueNDRangeKernel(kernel,
+                                       cl::NDRange(i),
+                                       cl::NDRange(m),
+                                       cl::NullRange,
+                                       nullptr, &event);
+
+
+            event.wait();
+            queue.enqueueReadBuffer(instancesOutBuffer,CL_TRUE,0, sizeof(int)*m, out);
+            maxVal = std::max(max(out, m), maxVal);
+
+            if (i == 0) {
+                i = m;
+            }
+
+            offset = i;
+        }
+
+//        int m = 1 << n;
+        // for each instance spawn a new worker
+
+
+
+
+
+//        char* h = CombUtils::fillWithAllBits(n);
+
+//        queue.enqueueWriteBuffer(instancesBuffer,
+//                                 CL_TRUE, 0,
+//                                 sizeof(char)*n*m, h);
+
+
+
+
+
+
+
+
 
         delete [] out;
-        delete [] h;
+//        delete [] h;
 
-        return val;
+        return maxVal;
 
     }
 

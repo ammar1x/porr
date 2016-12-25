@@ -21,16 +21,24 @@ TEST(TestConfiguration, conf) {
     // nothing
 }
 
+
+
+
 TEST(TestBruteForce, bruteOne) {
     KnapsackProblem pr;
     pr.capacity = 900;
-    pr.objectsWeights = {4, 6, 5, 5, 5, 5, 5,5 ,5, 5,5};
-    pr.objectsValues = {4, 6, 5, 5, 5, 5, 5,5 ,5, 5,5};
+    pr.objectsWeights = {4};
+    pr.objectsValues = {4};
     SeqBruteForceSolver solver;
     int sol = solver.solve(pr);
     cout << sol << endl;
 //    EXPECT_EQ(sol, 12);
 }
+
+TEST(TestComb, comb1) {
+    auto d = CombUtils::getAllBitsOfLen(4);
+}
+
 
 
 TEST(TestBruteForce, bruteTwo) {

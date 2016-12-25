@@ -24,12 +24,14 @@ public:
         cout << endl;
 
     }
+
     static void toString(vector<vector<int>> &s) {
         cout << "[" << endl;
         for(vector<int>& l : s) {
             toString(l);
         }
         cout << "]";
+        cout << endl;
     }
 
     static int* asArray(vector<vector<int>> ids) {
@@ -45,6 +47,59 @@ public:
         }
         return h;
     }
+
+
+    /**
+   * Get binary representation of number of length len.
+   */
+    static void fillWithBits(int len, int number, char* out) {
+        int bit = (1 << len) - 1;
+        memset(out, 0, sizeof(char)*len);
+        int i = len;
+        do {
+            out[--i] = number & 1;
+        } while(number >>= 1);
+    }
+
+    static char* fillWithAllBits(int len) {
+        int m = 1 << len;
+        int n = len;
+        char *out = new char[m*n];
+        for(int i = 0; i < m; ++i) {
+            fillWithBits(len, i, out+i*n);
+        }
+        return out;
+    }
+
+    /**
+     * Get binary representation of number of length len.
+     */
+    static vector<int> getBits(int len, int number) {
+        int bit = (1 << len) - 1;
+        vector<int> d(len, 0);
+        int i = len;
+        do {
+            d[--i] = number & 1;
+        } while(number >>= 1);
+        return d;
+    }
+
+
+
+    /**
+     * Get all binary numbers of length len;
+     */
+    static vector<vector<int>> getAllBitsOfLen(int len) {
+        int v = 1 << len;
+        vector<vector<int>> ret;
+        ret.resize(v);
+        for(int i = 0; i < v; ++i) {
+            ret.push_back(getBits(len, i));
+        }
+        return ret;
+    }
+
+
 
     static vector<vector<int>> combination(int n) {
         if (n == 0) {

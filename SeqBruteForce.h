@@ -20,34 +20,32 @@ class SeqBruteForceSolver : public KnapsackProblemSolver {
 
 public:
 
-    virtual int solve(KnapsackProblem& problem) override {
+    virtual long solve(const KnapsackProblem& problem) override {
 
         int n = problem.objectsValues.size();
-        vector<vector<int>> instances = CombUtils::combination(n);
 
         long weight = 0;
         long maxVal = 0;
-        vector<int> * d;
 
-        for(vector<int> &instance : instances) {
+        int m = 1 << n; // number of possible solutions
+        for(int i = 0; i < m; ++i) {
+            long tmpWeight = 0;
+            long tmpValue = 0;
 
-            long tempWeight = 0 ;
-            long tempValue  = 0;
+            int num = i;
+            int j = 0;
+            do {
+                bool take = (num & 1) == 1;
+                if (take) {
+                    tmpWeight += problem.objectsWeights[j];
+                    tmpValue += problem.objectsValues[j];
+                }
+                j++;
+            } while(num >>= 1);
 
-            for(int i = 0; i < instance.size(); ++i) {
-                if(instance[i] == 0)
-                    continue;
-                tempWeight += problem.objectsWeights[i];
-                tempValue += problem.objectsValues[i];
+            if(tmpWeight <= problem.capacity && tmpValue > maxVal) {
+                maxVal = tmpValue;
             }
-
-
-            if (tempWeight < problem.capacity && tempValue > maxVal) {
-                maxVal = tempValue;
-                weight = tempWeight;
-                d = &instance;
-            }
-
         }
         return maxVal;
     }

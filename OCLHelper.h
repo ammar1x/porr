@@ -14,14 +14,42 @@
 
 
 
+
 struct OCLHelper {
 
 
+    std::tuple<cl::Context, cl::Device> getEnv() {
+        auto dev = getAnyDevice();
+        return std::make_tuple(getContext(dev), dev);
+    }
 
+    static cl::Context getContext(cl::Device& dev) {
+        return cl::Context({dev});
+    }
+
+    static cl::Device getAnyDevice() {
+
+        std::vector<cl::Device> devices = getDevices(CL_DEVICE_TYPE_GPU);
+        if (devices.empty()) {
+            devices = getDevices();
+        }
+
+        if(devices.size() == 0){
+            throw std::runtime_error("No devices found. Check OpenCL installation!");
+        }
+
+        auto device = devices[0];
+        return device;
+    }
 
     static cl::Buffer createFloatBuffer(cl::Context&context, int n) {
         return cl::Buffer(context, CL_MEM_READ_WRITE, sizeof(float)* n);
     }
+
+    static cl::Buffer createCharBuffer(cl::Context&context, int n) {
+        return cl::Buffer(context, CL_MEM_READ_WRITE, sizeof(char)* n);
+    }
+
     static cl::Buffer createIntBuffer(cl::Context &context, int n) {
         return cl::Buffer(context, CL_MEM_READ_WRITE, sizeof(int)*n);
     }
@@ -43,11 +71,6 @@ struct OCLHelper {
             platform.getDevices(device_type, &devs);
             std::copy(devs.begin(), devs.end(), std::back_inserter(allDevs));
         }
-
-        if(allDevs.size() == 0){
-            throw std::runtime_error("No devices found. Check OpenCL installation!");
-        }
-
         return allDevs;
     }
 
