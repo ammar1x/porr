@@ -14,11 +14,13 @@
 
 
 
-
+/**
+ * Helper functions for opencl api.
+ */
 struct OCLHelper {
 
 
-    std::tuple<cl::Context, cl::Device> getEnv() {
+    static std::tuple<cl::Context, cl::Device> getEnv() {
         auto dev = getAnyDevice();
         return std::make_tuple(getContext(dev), dev);
     }

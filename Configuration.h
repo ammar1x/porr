@@ -17,7 +17,7 @@
 using namespace std;
 
 /**
- * Reads file with weird format.
+ * Reads data file.
  */
 class Configuration {
 
@@ -26,7 +26,6 @@ public:
     Configuration() {}
 
     static Configuration fromFile(string fileName) {
-
 
 
         fstream f;
@@ -105,6 +104,47 @@ public:
         j["knapsacksCapacities"] = knapsacksCapacities;
         j["constraints"] = constraints;
         return j;
+    }
+
+
+    static Configuration fromJsonFile(std::string path) {
+        std::ifstream i(path);
+        nlohmann::json j;
+        i >> j;
+        return Configuration::fromJson(j);
+    }
+
+    static Configuration fromJson(std::string f) {
+        return Configuration::fromJson(nlohmann::json::parse(f));
+    }
+
+    static Configuration fromJson(nlohmann::json j) {
+        Configuration c;
+
+        c.nameOfTheGame = j["nameOfTheGame"];
+        c.optimalValue = j["optimalValue"];
+        c.knapsacksCount = j["knapsacksCount"];
+        c.objectsCount = j["objectsCount"];
+
+        for(auto el : j["objectsValues"]) {
+            c.objectsValues.push_back(el);
+        }
+
+        for(int  el: j["knapsacksCapacities"]) {
+            c.knapsacksCapacities.push_back(el);
+        }
+
+        int i = 0;
+        for(auto  v : j["constraints"]) {
+            c.constraints.push_back(std::vector<int>());
+            for(int  e : v) {
+                c.constraints[i].push_back(e);
+            }
+            i++;
+        }
+
+
+         return c;
     }
 
     /*

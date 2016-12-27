@@ -3,18 +3,26 @@
 
 # install dependencies
 
+0 REQUIRED
 - install cmake (version > 3.4)
 - install opencl (drivers + api + libraries)
-- install googletest
 - install mpi
+
+1 OPTIONAL
+- gtest
+- glog
+- benchmark
+
+
 
 
 # build
 
 ```
 mkdir build
-cd
+cd build
 cmake ../
+make
 ```
 
 binary files will be in directory output/bin
@@ -33,6 +41,7 @@ examples:
 ```
         ./bruteForce seq data/pet2.dat
         ./bruteForce opencl data/pet2.dat
+        mpirun -np 3 ./bruteForce data/pet2.dat
 
 ```
 

@@ -9,7 +9,6 @@
 #include <fstream>
 #include <streambuf>
 #include "KnapsackProblem.h"
-#include "CombUtils.h"
 #include "OCLHelper.h"
 #include <glog/logging.h>
 
@@ -21,7 +20,10 @@ public:
 
 
     OCLBruteForce() :
-            kernelPath("/Users/ammar/Dropbox/porr/conf/KnapsackBruteSolver.cl"){
+            /**
+             * Path is relative to binary file.
+             */
+            kernelPath("./conf/KnapsackBruteSolver.cl"){
 
     }
 
@@ -73,7 +75,6 @@ public:
 
         int n = problem.objectsValues.size();
 
-//        vector<vector<int>> instances = CombUtils::getAllBitsOfLen(n);
 
         int count = std::min(20, n);
         int m = 1 << count;
@@ -129,29 +130,8 @@ public:
             offset = i;
         }
 
-//        int m = 1 << n;
-        // for each instance spawn a new worker
-
-
-
-
-
-//        char* h = CombUtils::fillWithAllBits(n);
-
-//        queue.enqueueWriteBuffer(instancesBuffer,
-//                                 CL_TRUE, 0,
-//                                 sizeof(char)*n*m, h);
-
-
-
-
-
-
-
-
 
         delete [] out;
-//        delete [] h;
 
         return maxVal;
 

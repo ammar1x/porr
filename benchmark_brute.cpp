@@ -16,18 +16,6 @@
 
 using namespace std;
 
-void benchmark_combinations(benchmark::State& state) {
-    while(state.KeepRunning()) {
-            CombUtils::combination(state.range(0));
-    }
-}
-
-void bench_getAllBits(benchmark::State& state) {
-    while(state.KeepRunning()) {
-        CombUtils::getAllBitsOfLen(state.range(0));
-    }
-}
-
 OCLBruteForce oclSolver;
 
 cl::Device dev;

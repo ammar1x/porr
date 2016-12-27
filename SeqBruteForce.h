@@ -10,7 +10,6 @@
 
 #include "KnapsackProblemSolver.h"
 
-#include "CombUtils.h"
 
 /**
  * Brute force
@@ -49,6 +48,38 @@ public:
         }
         return maxVal;
     }
+
+
+    virtual long solve(const KnapsackProblem& problem, int start, int stop)  {
+
+        int n = problem.objectsValues.size();
+
+        long weight = 0;
+        long maxVal = 0;
+
+//        int m = 1 << n; // number of possible solutions
+        for(int i = start; i < stop; ++i) {
+            long tmpWeight = 0;
+            long tmpValue = 0;
+
+            int num = i;
+            int j = 0;
+            do {
+                bool take = (num & 1) == 1;
+                if (take) {
+                    tmpWeight += problem.objectsWeights[j];
+                    tmpValue += problem.objectsValues[j];
+                }
+                j++;
+            } while(num >>= 1);
+
+            if(tmpWeight <= problem.capacity && tmpValue > maxVal) {
+                maxVal = tmpValue;
+            }
+        }
+        return maxVal;
+    }
+
 
 };
 

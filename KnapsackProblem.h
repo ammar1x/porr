@@ -10,6 +10,7 @@
 #include "Configuration.h"
 
 using namespace std;
+
 /**
  * Defines 0/1 KnapsackProblem parameters
  */

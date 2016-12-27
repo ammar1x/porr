@@ -9,6 +9,7 @@
 #include <vector>
 
 
+
 struct DataFactory {
     static std::vector<int> range(int start, int stop, int step=1) {
         std::vector<int> ret;
@@ -19,6 +20,9 @@ struct DataFactory {
     }
 };
 
+/**
+ * Fake knapsack problems factory.
+ */
 struct KnapsackProblemFactory {
 
     static KnapsackProblem createSimpleProblem(int capacity, int objectsCount) {

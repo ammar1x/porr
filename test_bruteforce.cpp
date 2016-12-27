@@ -35,9 +35,6 @@ TEST(TestBruteForce, bruteOne) {
 //    EXPECT_EQ(sol, 12);
 }
 
-TEST(TestComb, comb1) {
-    auto d = CombUtils::getAllBitsOfLen(4);
-}
 
 
 

@@ -5,7 +5,6 @@
 #ifndef PORR_PORR_H_H
 #define PORR_PORR_H_H
 
-#include "CombUtils.h"
 #include "Configuration.h"
 #include "KnapsackProblem.h"
 #include "KnapsackProblemSolver.h"
