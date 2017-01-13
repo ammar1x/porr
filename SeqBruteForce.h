@@ -21,12 +21,13 @@ public:
 
     virtual long solve(const KnapsackProblem& problem) override {
 
-        int n = problem.objectsValues.size();
+        long n = problem.objectsValues.size();
 
         long weight = 0;
         long maxVal = 0;
 
-        int m = 1 << n; // number of possible solutions
+        long one = 1;
+        long m = one << n; // number of possible solutions
         for(int i = 0; i < m; ++i) {
             long tmpWeight = 0;
             long tmpValue = 0;
@@ -50,14 +51,13 @@ public:
     }
 
 
-    virtual long solve(const KnapsackProblem& problem, int start, int stop)  {
+    virtual long solve(const KnapsackProblem& problem, long start, long stop)  {
 
         int n = problem.objectsValues.size();
 
         long weight = 0;
         long maxVal = 0;
 
-//        int m = 1 << n; // number of possible solutions
         for(int i = start; i < stop; ++i) {
             long tmpWeight = 0;
             long tmpValue = 0;

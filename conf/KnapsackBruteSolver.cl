@@ -6,8 +6,8 @@ __kernel void solve(__global char* instances,
                      __global int* out, int n, int capacity)
 {
 
-    int id = get_global_id(0);
-    int lid = get_local_id(0);
+    long id = get_global_id(0);
+    long lid = get_local_id(0);
 
 
 /*
@@ -26,7 +26,7 @@ __kernel void solve(__global char* instances,
     int totalWeight = 0;
 
 
-    int num = get_global_id(0);
+    long num = get_global_id(0);
     int j = 0;
     do {
         bool take = (num & 1) == 1;
@@ -42,7 +42,7 @@ __kernel void solve(__global char* instances,
         // solution not found
         value = -1;
     }
-    int offset = get_global_offset(0);
+    long offset = get_global_offset(0);
     out[id-offset] = value;
 
 }

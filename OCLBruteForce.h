@@ -10,10 +10,8 @@
 #include <streambuf>
 #include "KnapsackProblem.h"
 #include "OCLHelper.h"
-#include <glog/logging.h>
-
-
 #include "KnapsackProblemSolver.h"
+
 
 class OCLBruteForce : public KnapsackProblemSolver {
 public:
@@ -40,7 +38,6 @@ public:
         this->device = dev;
         this->context = ctx;
         buildProgram();
-        LOG(INFO) << OCLHelper::getDeviceInfo(*this->device) << endl;
 
     }
 
@@ -76,8 +73,9 @@ public:
         int n = problem.objectsValues.size();
 
 
-        int count = std::min(20, n);
-        int m = 1 << count;
+        long count = std::min(20, n);
+        long one = 1;
+        long m = one << count;
 
         cl::Buffer instancesBuffer = OCLHelper::createCharBuffer(*context, 1);
 
@@ -109,7 +107,8 @@ public:
         int maxVal = 0;
 
 
-        for(int i = 0, offset = 0; i <= (1 << n); i += m) {
+        for(long i = 0, offset = 0; i <= (1 << n); i += m) {
+
 
             cl::Event event;
             queue.enqueueNDRangeKernel(kernel,
@@ -150,7 +149,6 @@ private:
     cl::Context* context;
     cl::Device* device;
     cl::Program program;
-
 
 };
 #endif //PORR_OPENCLBRUTEFORCE_H_H

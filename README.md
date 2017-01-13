@@ -8,13 +8,6 @@
 - install opencl (drivers + api + libraries)
 - install mpi
 
-1 OPTIONAL
-- gtest
-- glog
-- benchmark
-
-
-
 
 # build
 

@@ -2,3 +2,7 @@
 output/
 build/
 test_cpp.cpp
+test_opencl.cpp
+test_mpi.cpp
+benchmark_brute.cpp
+test_bruteforce.cpp

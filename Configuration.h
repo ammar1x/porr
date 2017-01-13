@@ -45,7 +45,9 @@ public:
             nextInts(f, constraints, c.objectsCount);
             c.constraints.push_back(constraints);
         }
-        c.optimalValue = nextInt(f);
+
+//        c.optimalValue = nextInt(f);
+        nextInt(f);
         c.nameOfTheGame = nextToken(f);
 
         return c;
@@ -97,7 +99,7 @@ public:
         using json = nlohmann::json;
         json j;
         j["nameOfTheGame"] = nameOfTheGame;
-        j["optimalValue"] = optimalValue;
+//        j["optimalValue"] = optimalValue;
         j["knapsacksCount"] = knapsacksCount;
         j["objectsCount"] = objectsCount;
         j["objectsValues"] = objectsValues;
@@ -122,7 +124,7 @@ public:
         Configuration c;
 
         c.nameOfTheGame = j["nameOfTheGame"];
-        c.optimalValue = j["optimalValue"];
+//        c.optimalValue = j["optimalValue"];
         c.knapsacksCount = j["knapsacksCount"];
         c.objectsCount = j["objectsCount"];
 
@@ -154,14 +156,14 @@ public:
         using json = nlohmann::json;
         json j;
         j["nameOfTheGame"] = nameOfTheGame;
-        j["optimalValue"] = optimalValue;
         j["knapsacksCount"] = knapsacksCount;
         j["objectsCount"] = objectsCount;
+        j["nameOfTheGame"] = nameOfTheGame;
         return j;
     }
 
     string nameOfTheGame = "";
-    long optimalValue = -1;
+//    long optimalValue = -1;
     int knapsacksCount = -1;
     int objectsCount = -1;
     vector<int> objectsValues;

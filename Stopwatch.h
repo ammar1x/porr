@@ -24,6 +24,7 @@ public:
     void start() { _start = _end = ClockT::now(); }
     DurationT stop() { _end = ClockT::now(); return elapsed();}
     DurationT elapsed() {
+        std::chrono::time_point<ClockT> _end = ClockT::now();
         auto delta = std::chrono::duration_cast<TimeT>(_end-_start);
         return delta.count();
     }
@@ -33,7 +34,6 @@ template <class Result, class F, typename ...Args>
 tuple<Result, double> timeit(F func, Args&& ...args) {
     Stopwatch<> sw;
     Result res = func(forward<Args>(args)...);
-    sw.stop();
     return std::make_tuple(res, sw.elapsed());
 }
 

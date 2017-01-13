@@ -6,6 +6,7 @@
 #define PORR_MPIHELPER_H
 
 #include <mpi.h>
+#include <string.h>
 
 
 /**
@@ -30,16 +31,19 @@ struct MPIHelper {
     }
 
     static void broadcast(std::string s, int root) {
-        int n = s.size() + 1;
-        constexpr int MAX_LEN = 10000;
+        int n = s.size() ;
+        constexpr int MAX_LEN = 100000;
         static char buffer[MAX_LEN];
+
         memcpy(buffer, s.c_str(), n);
+        buffer[n+1] = '\0';
+
         MPI_Bcast(buffer, MAX_LEN, MPI_CHAR, root, MPI_COMM_WORLD);
     }
 
     template<class T>
     static T broadcastRecv(int root) {
-        constexpr  int MAX_LEN = 10000;
+        constexpr  int MAX_LEN = 100000;
         static char buffer[MAX_LEN];
         MPI_Bcast(buffer, MAX_LEN, MPI_CHAR, root, MPI_COMM_WORLD);
         return T(buffer);
@@ -73,8 +77,6 @@ struct MPIHelper {
         int n = msg.size() + 1;
         MPI_Send(msg.c_str(), n , MPI_CHAR, dst, tag, MPI_COMM_WORLD);
     }
-
-
 
     /**
      *
