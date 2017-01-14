@@ -11,9 +11,10 @@
 #include "utils.h"
 
 
+static LOGGING::LogStream& LOG = LOGGING::LogStream::global(LOGGING::info);
 
-static LOGGING::LogStream LOG = LOGGING::LogStream::global(LOGGING::info);
 using LOGGING::endl;
+
 
 
 int runMPIBruteForce(string filePath) {
@@ -40,10 +41,10 @@ int runMPIBruteForce(string filePath) {
         MPIHelper::broadcast(cjson, MASTERS_RANK);
 
         KnapsackProblem p = getKnapsackProblems(c)[0];
-        long workersSize = size - 1;
-        long one = 1;
-        long solutions = one << (p.objectsValues.size());
-        long perWorker = solutions/workersSize;
+        int64_t workersSize = size - 1;
+        int64_t one = 1;
+        int64_t solutions = one << (p.objectsValues.size());
+        int64_t perWorker = solutions/workersSize;
 
         LOG.INFO() << "number of schedulers = " << 1 << endl;
         LOG.INFO() << "number of workers = " << size - 1 << endl;
@@ -53,8 +54,8 @@ int runMPIBruteForce(string filePath) {
         vector<int64_t> res(size, -1);
         int64_t fake = -1;
         MPI_Gather(&fake, 1, MPI_INT64_T, res.data(), 1, MPI_INT64_T, MASTERS_RANK, MPI_COMM_WORLD);
-        long maxVal = 0;
-        for_each(res.begin(), res.end(), [&maxVal](long a) {
+        int64_t maxVal = 0;
+        for_each(res.begin(), res.end(), [&maxVal](int64_t a) {
             maxVal = std::max(a, maxVal);
         });
 
@@ -71,12 +72,12 @@ int runMPIBruteForce(string filePath) {
         KnapsackProblem p = getKnapsackProblems(c)[0]; // get the first one
 
         int workersSize = size-1;
-        long one = 1;
-        long solutions = one << (p.objectsValues.size());
-        long perWorker = solutions/workersSize;
+        int64_t one = 1;
+        int64_t solutions = one << (p.objectsValues.size());
+        int64_t perWorker = solutions/workersSize;
 
-        long from = (rank-1)*perWorker;
-        long to = (rank) * perWorker;
+        int64_t from = (rank-1)*perWorker;
+        int64_t to = (rank) * perWorker;
 
         if (rank == size - 1) {
             // last worker gets most of the work
@@ -119,7 +120,7 @@ int runOclBruteForce(string filePath) {
         devices = OCLHelper::getDevices();
     }
 
-    auto device = devices[0];
+    auto device = OCLHelper::chooseTheBest(devices);
     LOG.INFO() << OCLHelper::getDeviceInfo(device) << endl;
 
 
@@ -135,7 +136,9 @@ int runOclBruteForce(string filePath) {
 
 
     sw.start();
-    LOG.INFO() << "Optimal value = " << solver.solve(problems[0]) << endl;
+
+    int64_t sol = solver.solve(problems[0]);
+    LOG.INFO() << "Optimal value = " << sol << endl;
     LOG.INFO() << "time: " << sw.elapsed() / 1000 << " ms" << endl;
 
     return 0;
@@ -153,7 +156,10 @@ int runSeqBruteForce(string filePath) {
 
     Stopwatch<> sw;
     sw.start();
-    LOG.INFO() << "Optimal value = " << solver.solve(problems[0]) << endl;
+    KnapsackProblem kp = problems[0];
+//    int64_t sol = knapsack(kp.capacity, kp.objectsWeights.data(), kp.objectsValues.data(), kp.objectsValues.size());
+    int64_t sol = solver.solve(problems[0]);
+    LOG.INFO() << "Optimal value = " << sol << endl;
     LOG.INFO() << "time: " << sw.elapsed() / 1000 << " ms" << endl;
 
     return 0;

@@ -12,8 +12,13 @@
 #include "OCLHelper.h"
 #include "KnapsackProblemSolver.h"
 
+#include "utils.h"
+
+using namespace LOGGING;
 
 class OCLBruteForce : public KnapsackProblemSolver {
+
+
 public:
 
 
@@ -70,15 +75,18 @@ public:
     virtual long solve(const KnapsackProblem& problem) override {
 
 
-        int n = problem.objectsValues.size();
+        int64_t n = problem.objectsValues.size();
 
 
-        long count = std::min(20, n);
-        long one = 1;
-        long m = one << count;
+        int64_t count = std::min((int64_t)20, n);
+        int64_t one = 1;
+        int64_t m = one << count;
+
+        LogStream::global().DEBUG()<< "OCLBruteForce: " << "chunk size = " << m << endl;
+        LogStream::global().DEBUG()<< "OCLBruteForce: " << "solutions = " << (one << n)  << endl;
+
 
         cl::Buffer instancesBuffer = OCLHelper::createCharBuffer(*context, 1);
-
         cl::Buffer valuesBuffer = OCLHelper::createIntBuffer(*context, n);
         cl::Buffer weightsBuffer = OCLHelper::createIntBuffer(*context, n);
         cl::Buffer instancesOutBuffer = OCLHelper::createIntBuffer(*context, m);
@@ -107,7 +115,7 @@ public:
         int maxVal = 0;
 
 
-        for(long i = 0, offset = 0; i <= (1 << n); i += m) {
+        for(int64_t i = 0, offset = 0; i <= (one << n); i += m) {
 
 
             cl::Event event;
@@ -151,4 +159,5 @@ private:
     cl::Program program;
 
 };
+
 #endif //PORR_OPENCLBRUTEFORCE_H_H

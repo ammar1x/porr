@@ -10,6 +10,7 @@
 #include <cl.hpp>
 #include <string>
 #include <sstream>
+#include <algorithm>
 
 
 
@@ -81,8 +82,35 @@ struct OCLHelper {
         ss<< "CL_DEVICE_NAME : "<<device.getInfo<CL_DEVICE_NAME>()<<"\n";
         ss<< "CL_DEVICE_PLATFORM : "<<device.getInfo<CL_DEVICE_PLATFORM>()<<"\n";
         ss<< "CL_DEVICE_TYPE : "<<device.getInfo<CL_DEVICE_TYPE>()<<"\n";
+        ss<< "CL_DEVICE_MAX_COMPUTE_UNITS : " << device.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>() << "\n";
+        ss<< "CL_DEVICE_VENDOR : "<<device.getInfo<CL_DEVICE_VENDOR>()<<"\n";
+
+
         return ss.str();
     }
+
+    static cl::Device chooseTheBest(std::vector<cl::Device> &devices) {
+
+        cl::Device ret = devices[0];
+        string devName = ret.getInfo<CL_DEVICE_VENDOR>();
+
+        for(cl::Device& device : devices) {
+
+            std::string data = device.getInfo<CL_DEVICE_VENDOR>();
+            int deviceType = device.getInfo<CL_DEVICE_TYPE>();
+
+            std::transform(data.begin(), data.end(), data.begin(), ::tolower);
+            if (data.find("nvidia") != std::string::npos) {
+                ret = device;
+            }
+
+            if (data.find("amd") != std::string::npos && deviceType == CL_DEVICE_TYPE_GPU) {
+                ret = device;
+            }
+
+        }
+        return ret;
+     }
 
 
 

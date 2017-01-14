@@ -1,4 +1,5 @@
 
+typedef long int64_t;
 
 __kernel void solve(__global char* instances,
                     __global int* objectsValues,
@@ -22,12 +23,12 @@ __kernel void solve(__global char* instances,
     wait_group_events(2, es);
 */
 
-    int value = 0;
-    int totalWeight = 0;
+    long value = 0;
+    long totalWeight = 0;
 
 
     long num = get_global_id(0);
-    int j = 0;
+    long j = 0;
     do {
         bool take = (num & 1) == 1;
         if (take) {
@@ -43,6 +44,6 @@ __kernel void solve(__global char* instances,
         value = -1;
     }
     long offset = get_global_offset(0);
-    out[id-offset] = value;
+    out[id-offset] = (int)value;
 
 }

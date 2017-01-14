@@ -29,10 +29,11 @@ namespace LOGGING {
         LogginLevel _currentLevel;
 
         LogStream(std::ostream *dest, LogginLevel level) : _dest(dest), _level(level),
-                                                           _currentLevel(level) { }
+                                                           _currentLevel(level) {
+        }
 
 
-        static LogStream global(LogginLevel level) {
+        static LogStream& global(LogginLevel level=debug) {
             static LogStream logStream(&std::cout, level);
             return logStream;
         }
@@ -44,7 +45,7 @@ namespace LOGGING {
             }
 
             if (_dest != nullptr) {
-                *_dest << obj;
+                *_dest  << obj;
             }
             return *this;
         }
@@ -64,6 +65,8 @@ namespace LOGGING {
 
         LogStream &DEBUG() {
             _currentLevel = debug;
+
+
             return *this;
         }
 
