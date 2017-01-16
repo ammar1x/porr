@@ -13,8 +13,6 @@
 #include <algorithm>
 
 
-
-
 /**
  * Helper functions for opencl api.
  */
